@@ -10,24 +10,101 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var select = 0
+    @State private var showView = false
     var body: some View {
-        VStack{
-            Header(select: $select)
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                if self.select == 0 {
-                    OneRowView()
-                }else{
-                    GirdView()
+        ZStack(alignment: .top) {
+            VStack{ // second view
+                HStack(alignment: .top, spacing: 15){
+                    Image("pic")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    
+                    VStack(alignment: .leading, spacing: 10){
+                        Text("Catheine")
+                            .fontWeight(.bold)
+                        Text("New Your, Us")
+                    }
+                    .foregroundColor(.black)
+                    
+                    Spacer()
+                    Button(action: {
+                        withAnimation(Animation.default.speed(0.6)) {
+                            self.showView.toggle()
+                        }
+                        
+                    }) {
+                        Image(systemName: "multiply")
+                            .foregroundColor(.black)
+                            .font(.title)
+                    }
+                }
+            .padding()
+                
+                VStack(alignment: .leading, spacing: 25) {
+                    HStack(spacing: 20){
+                        Capsule()
+                            .fill(Color.yellow)
+                        .frame(width: 5, height: 35)
+                        Button(action: {
+                            withAnimation(Animation.default.speed(0.6)) {
+                                self.showView.toggle()
+                            }
+                        }) {
+                            Text("Home")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                        }
+                        Spacer()
+                    }
+                    
+                    HStack(spacing: 20){
+                        Capsule()
+                            .fill(Color.yellow)
+                        .frame(width: 5, height: 35)
+                        Button(action: {
+                            
+                        }) {
+                            Text("Order")
+                                .foregroundColor(.black)
+                                .fontWeight(.bold)
+                        }
+                        Spacer()
+                    }
                     
                 }
-            }.padding()
+            .padding()
+                Spacer()
+            
+            }
+            .background(Color.white)
+            .offset( x: !self.showView ?  230 : 0, y: 0)
+            .scaleEffect(!self.showView ? 0.1 : 1)
+            VStack{// first view
+                Header(select: $select, showView: $showView)
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    if self.select == 0 {
+                        OneRowView()
+                        
+                    }else{
+                        GirdView()
+                        
+                    }
+                }.padding()
+                
+                
+            }
+              
+                // .padding()
+                .background(Color("Color").edgesIgnoringSafeArea(.bottom))
+                
+                .offset( x: self.showView ?  230 : 0, y: 0)
+                .scaleEffect(self.showView ? 0.8 : 1)
             
             
+           
         }
-            
-            // .padding()
-            .background(Color("Color").edgesIgnoringSafeArea(.bottom))
+            //.scaleEffect(0.9)
            // .animation(.default)
         
         
@@ -86,65 +163,74 @@ var gridDatas = [
 
 struct Header: View {
     @Binding var select: Int
+    @Binding  var showView:Bool
     var body: some View {
-        ZStack{
-            HStack{
+                    ZStack{
+                HStack{
+                    
+                    Button(action: {
+                        withAnimation(Animation.default.speed(0.6)) {
+                            self.showView.toggle()
+                        }
+                    }) {
+                        Image(systemName:"line.horizontal.3")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                            .foregroundColor(.black)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
+                        Image("search")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                    }
+                }
+                .padding()
                 
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                    Image("settings")
-                        .renderingMode(.original)
-                        .resizable()
-                        .frame(width: 25, height: 25)
+                HStack(spacing: 25){
+                    
+                    VStack {
+                        Button(action: {
+                            self.select = 0
+                        }) {
+                            Image("row")
+                                .renderingMode(.template)
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(self.select == 0 ? .red : Color("Color"))
+                        }
+                        Circle().fill( self.select == 0 ? Color.red : Color.white)
+                            .frame(width: 7, height: 7)
+                    }.padding(.top, 7)
+                    
+                    
+                    
+                    
+                    VStack {
+                        Button(action: {
+                            self.select = 1
+                        }) {
+                            Image("grid")
+                                .renderingMode(.template)
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(self.select == 1 ? .red : Color("Color"))
+                        }
+                        Circle().fill( self.select == 1 ? Color.red : Color.white)
+                            .frame(width: 7, height: 7)
+                    }.padding(.top, 7)
                 }
                 
-                Spacer()
                 
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                    Image("search")
-                        .renderingMode(.original)
-                        .resizable()
-                        .frame(width: 25, height: 25)
-                }
             }
-            .padding()
-            
-            HStack(spacing: 25){
                 
-                VStack {
-                    Button(action: {
-                        self.select = 0
-                    }) {
-                        Image("row")
-                            .renderingMode(.template)
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(self.select == 0 ? .red : Color("Color"))
-                    }
-                    Circle().fill( self.select == 0 ? Color.red : Color.white)
-                        .frame(width: 7, height: 7)
-                }.padding(.top, 7)
-                
-                
-                
-                
-                VStack {
-                    Button(action: {
-                        self.select = 1
-                    }) {
-                        Image("grid")
-                            .renderingMode(.template)
-                            .resizable()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(self.select == 1 ? .red : Color("Color"))
-                    }
-                    Circle().fill( self.select == 1 ? Color.red : Color.white)
-                        .frame(width: 7, height: 7)
-                }.padding(.top, 7)
-            }.animation(.default)
-            
-            
-        }
-        .background(Color.white)
+            .background(Color.white)
+           // .scaleEffect(0.7)
+        
+        
     }
 }
 
@@ -160,6 +246,7 @@ struct OneRowView: View {
                 HStack {
                     Text(rowData.name)
                         .font(.system(size: 20))
+                        .foregroundColor(.black)
                     Spacer()
                     
                     Text(rowData.likes)
